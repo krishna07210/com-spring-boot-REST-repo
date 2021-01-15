@@ -1,4 +1,4 @@
-package com.spring.boot.repo.com_spring_boot_repo;
+package com.springboot;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
