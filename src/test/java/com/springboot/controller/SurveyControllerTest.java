@@ -26,7 +26,8 @@ import com.springboot.model.Question;
 import com.springboot.service.SurveyService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class) // It will not load all the Components instead it will load only MVC objects
+@WebMvcTest(value = SurveyController.class, secure = false) // It will not load all the Components instead it will load
+															// only MVC objects
 public class SurveyControllerTest {
 
 	@Autowired

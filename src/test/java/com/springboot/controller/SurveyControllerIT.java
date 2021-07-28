@@ -1,19 +1,21 @@
 package com.springboot.controller;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.skyscreamer.jsonassert.JSONAssert; 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.springboot.Application;
@@ -27,7 +29,10 @@ public class SurveyControllerIT {
 
 	private TestRestTemplate template = new TestRestTemplate();
 
-	HttpHeaders headers = new HttpHeaders();
+	// HttpHeaders headers = new HttpHeaders();
+	// Adding Authentication : Once we add the Spring security above HttpHeaders
+	// will fail because we don't have authentication.
+	HttpHeaders headers = createHeaders("user1", "secret1");
 
 	@Before
 	public void setupJSONAcceptType() {
@@ -48,10 +53,21 @@ public class SurveyControllerIT {
 	private String createUrl(String uri) {
 		return "http://localhost:" + port + uri;
 	}
-	
+
 	@Test
 	public void test() {
-		System.out.println("PORT" +port);
+		System.out.println("PORT" + port);
 	}
 
+	HttpHeaders createHeaders(String username, String password) {
+		// Create Basic authentication
+		return new HttpHeaders() {
+			{
+				String auth = username + ":" + password;
+				byte[] encodedAuth = Base64.encode(auth.getBytes(Charset.forName("US-ASCII")));
+				String authHeader = "Basic " + new String(encodedAuth);
+				set("Authorization", authHeader);
+			}
+		};
+	}
 }

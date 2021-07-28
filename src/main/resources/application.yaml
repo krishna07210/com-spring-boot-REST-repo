@@ -12,3 +12,8 @@ basic:
    value: true
    message: Dynamic Message YAML
    number: 100  
+   
+   
+spring:
+  main:
+    lazy-initialization: true
